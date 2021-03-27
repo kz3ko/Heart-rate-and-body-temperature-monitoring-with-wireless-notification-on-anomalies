@@ -102,14 +102,14 @@ def main():
         time_averaged = algorithm.moving_average(time_buf, n)
 
         # Get the last measured values.
-        irValue = int(ir_averaged[-1])
-        redValue = int(red_averaged[-1])
+        ir_value = int(ir_averaged[-1])
+        red_value = int(red_averaged[-1])
         now = time_averaged[-1]
 
         # Try to count hr and spo2 values based on readings. Start loop from beggining if any error occured.
         # Most of the time it is ZeroDivisionEror but except all errors to make sure device will not hang on.
         try:
-            new, hr, spo2 = algorithm.count_hr_spo(irValue, redValue, now)
+            new, hr, spo2 = algorithm.count_hr_spo(ir_value, red_value, now)
         except:
             continue
 
