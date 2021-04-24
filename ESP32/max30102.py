@@ -29,7 +29,9 @@ address = 0x57
 
 class Max30102:
     def __init__(self, scl = Pin(18), sda = Pin(19), freq = 400000):
-        """ Initiate MAX30102 class ond each function responsible for correct device start-up. """
+        """
+        Initiate MAX30102 class ond each function responsible for correct device start-up.
+        """
         # Define I2C connections and frequence.
         self.i2c = I2C(0, scl = scl, sda = sda, freq = freq)
         # Reset registers to default values.
@@ -41,21 +43,29 @@ class Max30102:
         self.setup()
 
     def write(self, reg, value):
-        """ Set value named 'value' in register named 'reg'. """
+        """
+        Set value named 'value' in register named 'reg'.
+        """
         data = bytearray(1)  # One byte long array.
         data[0] = value
         self.i2c.writeto_mem(address, reg, data)
 
     def reset(self):
-        """ Set default values of all registers. """
+        """
+        Set default values of all registers.
+        """
         self.write(mode_config, 0x40)  # 0b01000000 = 0x40
 
     def shutdown(self):
-        """ Shutdown the device. """
+        """
+        Shutdown the device.
+        """
         self.write(mode_config, 0x80)  # 0b10000000 = 0x80
 
     def setup(self):
-        """ Set all registers needed to correct work of sensor. """
+        """
+        Set all registers needed to correct work of sensor.
+        """
         # Enable interrupt from temperature conversion end.
         self.write(interrupt_enable_2, 0x02)
 
@@ -78,16 +88,23 @@ class Max30102:
         self.set_idle_current()
 
     def set_idle_current(self):
-        """ Set lower current when no body was detected. Let us save power by a bit. """
+        """
+        Set lower current when no body was detected. Let us save power by a bit.
+        """
         self.write(led_pa_1, 0x10)
         self.write(led_pa_2, 0x0)
 
     def set_work_current(self):
+        """
+        Set current value before work start.
+        """
         self.write(led_pa_1, 0x2f)
         self.write(led_pa_2, 0x2f)
 
     def get_data_samples(self):
-        """ Check amount of samples ready to read. """
+        """
+        Check amount of samples ready to read.
+        """
         write_pointer = self.i2c.readfrom_mem(address, fifo_write_pointer, 1)[0]
         read_pointer = self.i2c.readfrom_mem(address, fifo_read_pointer, 1)[0]
         samples = write_pointer - read_pointer
@@ -100,7 +117,9 @@ class Max30102:
         return samples
 
     def read_fifo(self):
-        """ Read red and ir values from the FIFO register. """
+        """
+        Read red and ir values from the FIFO register.
+        """
         # Clear both buffors with FIFO data read last time.
         red = None
         ir = None
@@ -115,7 +134,9 @@ class Max30102:
         return red, ir
 
     def read_values(self):
-        """ Read 'samples' samples from FIFO. Return ready to process data. """
+        """
+        Read 'samples' samples from FIFO. Return ready to process data.
+        """
         red_buf = []
         ir_buf = []
         samples = self.get_data_samples()
@@ -132,7 +153,9 @@ class Max30102:
         return red, ir, temperature
 
     def read_temperature(self):
-        """ Read temperature as sum of integer and fraction value. """
+        """
+        Read temperature as sum of integer and fraction value.
+        """
         # Initiate single temperature read.
         self.write(temp_config, 0x01)  # 0b00000001 = 0x01
 

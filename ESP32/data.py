@@ -6,7 +6,9 @@ class Data:
         self.reset()
 
     def update(self, *args):
-        """ Update all buffors with measured vales. """
+        """
+        Update all buffors with measured vales.
+        """
         self.date_buf.append(args[0])
         self.runtime_buf.append(args[1])
         self.realtime_buf.append(args[2])
@@ -25,7 +27,9 @@ class Data:
         self.buffor[6] = self.alarm_buf
 
     def reset(self):
-        """ Clear all data buffors. """
+        """
+        Clear all data buffors.
+        """
         self.date_buf = []
         self.runtime_buf = []
         self.realtime_buf = []
@@ -36,9 +40,13 @@ class Data:
         self.buffor = 7 * [[]]
 
     def check_amount(self):
-        """ Check amount of data collected in buffors. Equals to length of any of them. """
+        """
+        Check amount of data collected in buffors. Equals to length of any of them.
+        """
         return len(self.hr_buf)
 
     def get_buf(self):
-        """ Get output buffor. """
+        """
+        Get output buffor.
+        """
         return self.buffor

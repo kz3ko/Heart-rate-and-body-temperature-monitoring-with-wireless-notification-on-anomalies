@@ -1,12 +1,12 @@
 import mathfunctions as math
 
 # Indexes of specified samples types.
-ir = -1
-red = -2
-ir_previous = -3
-red_previous = -4
-time = -5
-time_previous = -6
+IR = -1
+RED = -2
+IR_PREVIOUS = -3
+RED_PREVIOUS = -4
+TIME = -5
+TIME_PREVIOUS = -6
 # Previous sample of ir equals to ir-2, previous sample of red equals to red-2, and previous sample of time equals to
 # time-1.
 
@@ -90,13 +90,13 @@ class HrSpOalgorithm:
 
     def reorder_samples(self, ir_value, red_value, time_value):
         """ Set previous sample as current before proceeding next one. Set gotten sample as current. """
-        self.sample[ir_previous] = self.sample[ir]
-        self.sample[red_previous] = self.sample[red]
-        self.sample[time_previous] = self.sample[time]
+        self.sample[IR_PREVIOUS] = self.sample[IR]
+        self.sample[RED_PREVIOUS] = self.sample[RED]
+        self.sample[TIME_PREVIOUS] = self.sample[TIME]
 
-        self.sample[ir] = ir_value
-        self.sample[red] = red_value
-        self.sample[time] = time_value
+        self.sample[IR] = ir_value
+        self.sample[RED] = red_value
+        self.sample[TIME] = time_value
 
     def detect_edge(self, i):
         """
@@ -125,7 +125,7 @@ class HrSpOalgorithm:
             self.local_max[i-2] = self.local_max[i]
             self.local_max[i] = self.max[i]
             self.local_max_time[i-2] = self.local_max_time[i]
-            self.local_max_time[i] = self.sample[time_previous]
+            self.local_max_time[i] = self.sample[TIME_PREVIOUS]
             self.rising_edge[i] = False
             self.extremum[i] = True
         elif self.rising_edge[i] and self.sample[i-2] == self.min[i] and self.local_max_detected[i]:
@@ -135,7 +135,7 @@ class HrSpOalgorithm:
             self.local_min[i-2] = self.local_min[i]
             self.local_min[i] = self.min[i]
             self.local_min_time[i-2] = self.local_min_time[i]
-            self.local_min_time[i] = self.sample[time_previous]
+            self.local_min_time[i] = self.sample[TIME_PREVIOUS]
             self.falling_edge[i] = False
             self.extremum[i] = False
         else:
@@ -165,19 +165,19 @@ class HrSpOalgorithm:
         self.new_values = False
         self.reorder_samples(ir_value, red_value, time_value)
         # Calculations are made for both of signals.
-        for signal in [ir, red]:
+        for signal in [IR, RED]:
             previous = signal - 2
             # Try to detect any edge and any extremum.
             self.detect_edge(signal)
             self.detect_extremum(signal)
             # Heartbeat is detected based on value from IR led.
-            if signal == ir:
+            if signal == IR:
                 # If true local maximum was detected and difference between it and the previouse one is higher than
                 # minimal declared value and higher than maximal declared value count it as a heartbeat.
                 max_min_diff = self.local_max[signal] - self.local_min[signal]
                 if (self.extremum[signal]) and (max_min_diff > self.min_diff) and (max_min_diff < self.max_diff):
                     # Save previous time as a present beat time, then count time between present and previous beat time.
-                    self.beat_time[-1] = self.sample[time_previous]
+                    self.beat_time[-1] = self.sample[TIME_PREVIOUS]
                     delta = self.beat_time[-1] - self.beat_time[-2]
                     # Calculate the bpm based on delta time in ms.
                     bpm = 60 / (delta/1000)
@@ -218,10 +218,10 @@ class HrSpOalgorithm:
                     self.acdc_ratio[signal] = self.ac[signal]/self.dc[signal]
                     # If the processed signal is a signal from the RED LED, then the signal from the IR LED has already
                     # been processed in this cycle.
-                    if signal == red:
+                    if signal == RED:
                         try:
                             # Try to count R factor. Leave function if ZeroDivisionError occurs.
-                            self.r = self.acdc_ratio[red] / self.acdc_ratio[ir]
+                            self.r = self.acdc_ratio[RED] / self.acdc_ratio[IR]
                         except ZeroDivisionError:
                             return
                         # Count spo2 value based on equation from AN6409 maxim integrated PDF.

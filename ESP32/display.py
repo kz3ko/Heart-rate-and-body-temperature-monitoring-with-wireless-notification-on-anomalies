@@ -11,7 +11,9 @@ class Display(Spi):
         super().__init__()
 
     def show_time(self, time, date, id):
-        """ Show present date, time and device id on display. These are being displayed constantly. """
+        """
+        Show present date, time and device id on display. These are being displayed constantly.
+        """
         # Fill the 128x16 pixels rectangle starting from 0x0 with 0s. It makes this part of display
         # completely clean. Any part of display may be cleared like this. It can be also filled with
         # 1s. 0 is dark pixel, seen as no pixel, 1 is 'blue' pixel.
@@ -24,7 +26,9 @@ class Display(Spi):
         self.display.show()
 
     def show_values(self, bpm, spo, temperature):
-        """ Show measured values on display. """
+        """
+        Show measured values on display.
+        """
         self.display.fill_rect(0, 36, 128, 28, 0)
         self.display.text('Pulse: ' + str(int(bpm)) + ' bpm', 0, 36, 1)
         self.display.text('SpO2 : ' + str("%.2f" % spo) + " %", 0, 46, 1)
@@ -34,7 +38,9 @@ class Display(Spi):
                 self.display.pixel(x + 104, y + 56, c)
 
     def show_wifi_status(self, status):
-        """ Show WiFi status on display."""
+        """
+        Show WiFi status on display.
+        """
         if status:
             self.display.setup()
             self.display.text('Connection', 24, 20, 1)
@@ -49,7 +55,9 @@ class Display(Spi):
             self.display.show()
 
     def show_alarm(self, alarm):
-        """ Show alarm if any occured. """
+        """
+        Show alarm if any occured.
+        """
         if alarm != '':
             self.display.fill_rect(0, 23, 128, 8, 0)
             self.display.text('ALARM!', 40, 23, 1)
@@ -57,16 +65,22 @@ class Display(Spi):
             self.display.fill_rect(0, 23, 128, 8, 0)
 
     def idle_state(self):
-        """ Set display in its idle state. Lower part of display is cleared. """
+        """
+        Set display in its idle state. Lower part of display is cleared.
+        """
         self.display.fill_rect(0, 23, 128, 41, 0)
 
     def work_state(self):
-        """ Set display in its work state. Inform that sensor tries to measure. """
+        """
+        Set display in its work state. Inform that sensor tries to measure.
+        """
         self.display.fill_rect(0, 23, 128, 41, 0)
         self.display.text('Waiting for beat!', 0, 23, 1)
 
     def clear(self):
-        """ Clear whole display. """
+        """
+        Clear whole display.
+        """
         self.display.clear()
 
     def setup(self):

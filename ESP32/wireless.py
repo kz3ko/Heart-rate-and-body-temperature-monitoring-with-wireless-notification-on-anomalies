@@ -41,11 +41,15 @@ class Wireless:
             return
 
     def wifi_status(self):
-        """ Get status of WiFi connection. """
+        """
+        Get status of WiFi connection.
+        """
         return self.wlan.isconnected()
 
     def mqtt_connect(self):
-        """ Connect with declared MQTT client. """
+        """
+        Connect with declared MQTT client.
+        """
         try:
             self.client.connect()
             self.mqtt_is_connected = True
@@ -53,9 +57,13 @@ class Wireless:
             self.mqtt_is_connected = False
 
     def mqtt_status(self):
-        """ Get the MQQT connection status. """
+        """
+        Get the MQQT connection status.
+        """
         return self.mqtt_is_connected
 
     def publish(self, data):
-        """ Publish 'data' on set topic. """
+        """
+        Publish 'data' on set topic.
+        """
         self.client.publish(self.topic, data)

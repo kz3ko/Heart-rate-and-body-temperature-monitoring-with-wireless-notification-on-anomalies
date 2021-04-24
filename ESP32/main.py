@@ -38,7 +38,9 @@ async def update_datetime():
         await uasyncio.sleep_ms(100)
 
 async def main():
-    """ Main function running on uc. The part before while loop runs only once. """
+    """
+    Main function running on uc. The part before while loop runs only once.
+    """
     # Make needed variables globalky accessible.
     global device_id, wireless, sensor, algorithm, display, led, data
 
